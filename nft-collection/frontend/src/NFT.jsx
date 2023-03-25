@@ -4,7 +4,7 @@ import { useAccount, useContract, useContractRead, useSigner } from "wagmi";
 import { NFTStorage } from "nft.storage";
 import { useNavigate } from "react-router-dom";
 
-const CONTRACT_ADDRESS = "0xf8Ef6084E0734e0359D91C82D3D23194fC832dA0";
+const CONTRACT_ADDRESS = "0x387b08E96cb9E6D056a391AFD7547aEaaBf0729f";
 
 const NFT_STORAGE_KEY = import.meta.env.VITE_NFT_STORAGE_KEY;
 
@@ -27,7 +27,7 @@ const NFT = () => {
 
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
-	const client = new NFTStorage({ token: NFT_STORAGE_KEY });
+	const client = new NFTStorage({ token:  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDNEODhDMjZkYjFiNmVhODY1Yjk2MGE1MjExQzhGMjUwNkUxZDdiQ2UiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY3OTIyNjczNzY1NSwibmFtZSI6ImJ1aWRsIn0.H0eoI8vkXyCQ4vNPejJatXcpXX_QAd8YwhuvINFU7HI" });
 
 	const changeHandler = event => {
 		setSelectedFile(event.target.files[0]);

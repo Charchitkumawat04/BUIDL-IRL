@@ -13,7 +13,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 
 // Define project id from cloud.walletconnect.com
-const projectId = "f19cac97ba60e7b23ce645d9a6e286f4";
+const projectId = "5d43c5eb58e317f73178dca5930c547e";
 
 // Configure chains
 const chains = [polygonMumbai];
