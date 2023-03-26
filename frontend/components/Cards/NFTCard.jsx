@@ -1,20 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { SVGProps, useEffect, useState } from "react";
 import Image from "next/image";
 import NFTAbi from "@/ABIs/BuidlNFT.json";
 import StakingAbi from "@/ABIs/Staking.json";
-import { useAccount, useContract, useSigner, useProvider } from "wagmi";
+import { useAccount, useContract, useSigner } from "wagmi";
 
 const NFTCard = ({ url, stake, tokenId }) => {
-  const [nft, setNft] = useState({
-    name: "",
-    image: "",
-    desc: "",
-    tokenID: tokenId,
-  });
-
-  const {data: signer} = useSigner();
-  const {address} = useAccount();
-
+  const { data: signer } = useSigner();
+  const { address } = useAccount();
   const stakingContract = useContract({
     address: StakingAbi.address,
     abi: StakingAbi.abi,
@@ -26,22 +18,12 @@ const NFTCard = ({ url, stake, tokenId }) => {
     signerOrProvider: signer,
   });
 
-  const getData = async () => {
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-
-      setNft({
-        name: data.name,
-        image: data.image,
-        desc: data.description,
-        tokenID: tokenId,
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
+  const [nft, setNft] = useState({
+    name: "",
+    image: "",
+    desc: "",
+    tokenID: tokenId,
+  });
   const stakeNft = async () => {
     try {
       const approve = await nftContract?.isApprovedForAll(
@@ -64,7 +46,6 @@ const NFTCard = ({ url, stake, tokenId }) => {
       console.log(err);
     }
   };
-
   const unStakeNft = async () => {
     try {
       const tx = await stakingContract?.unStakeNFT(nft.tokenID);
@@ -79,23 +60,25 @@ const NFTCard = ({ url, stake, tokenId }) => {
       console.log(err);
     }
   };
-
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-        console.log(data);
-        setNft({
-          name: data.name,
-          image: data.image,
-          desc: data.description,
-          tokenID: tokenId,
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    if (url) {
+      const getData = async () => {
+        try {
+          const res = await fetch(url);
+          const data = await res.json();
+
+          setNft({
+            name: data.name,
+            image: data.image,
+            desc: data.description,
+            tokenID: tokenId,
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      getData();
+    }
   }, [tokenId, url]);
 
   return (

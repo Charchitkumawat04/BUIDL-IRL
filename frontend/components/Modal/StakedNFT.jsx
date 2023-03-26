@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import NFTCard from "../Cards/NFTCard";
 import NFTAbi from "@/ABIs/BuidlNFT.json";
 import StakingAbi from "@/ABIs/Staking.json";
-import { useAccount, useContract, useSigner, useProvider } from "wagmi";
+import { useAccount, useContract, useProvider } from "wagmi";
 import { ethers } from "ethers";
 
 const StakedNft = () => {
@@ -11,8 +11,7 @@ const StakedNft = () => {
   const [rewardBal, setRewardBal] = useState();
   const [tokenId, setTokenId] = useState();
   const [tokenURI, setTokenURI] = useState("");
-
-  const stakingContract = useContract({  
+  const stakingContract = useContract({
     address: StakingAbi.address,
     abi: StakingAbi.abi,
     signerOrProvider: provider,
@@ -22,18 +21,6 @@ const StakedNft = () => {
     abi: NFTAbi.abi,
     signerOrProvider: provider,
   });
-
-  const getStakedNFTs = async () => {
-    try {
-      const tx = await stakingContract?.stakeTokenId(address);
-      setTokenId(tx.toNumber());
-      console.log(tx.toNumber());
-      const tx2 = await nftContract?.tokenURI(tokenId);
-      setTokenURI(tx2);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   useEffect(() => {
     if (address) {
@@ -65,14 +52,15 @@ const StakedNft = () => {
   return (
     <div className="flex flex-col mx-auto text-center">
       <h2 className="text-2xl">Your Staked NFTs</h2>
-      <div className="mx-auto my-7"></div>
-      {tokenURI && rewardBal ? (
+      <div className="mx-auto my-7">
+        {tokenURI && rewardBal ? (
           <NFTCard url={tokenURI} stake={false} tokenId={tokenId} />
         ) : (
           <section className="border p-5 rounded-lg shadow-lg">
             <h1 className="my-5 text-lg">No NFTs Staked !</h1>
           </section>
         )}
+      </div>
     </div>
   );
 };

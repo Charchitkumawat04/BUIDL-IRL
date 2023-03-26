@@ -6,10 +6,9 @@ import { ethers } from "ethers";
 
 const TokenBal = () => {
   const { address } = useAccount();
+  const provider = useProvider();
   const [tokenBal, setTokenBal] = useState("0");
   const [rewardBal, setRewardBal] = useState("0");
-
-  const provider = useProvider();
   const tokenContract = useContract({
     address: TokenAbi.address,
     abi: TokenAbi.abi,
@@ -20,48 +19,30 @@ const TokenBal = () => {
     abi: StakingAbi.abi,
     signerOrProvider: provider,
   });
-  const getReward = async () => {
-    try {
-      const reward = await stakingContract?.calculateReward(address);
-      setRewardBal(ethers.utils.formatUnits(reward, 18));
-    } catch (err) {
-      console.log(err);
-    }
-};
-const getBalance = async () => {
-  try {
-    const tokenBalance = await tokenContract?.balanceOf(address);
 
-    setTokenBal(ethers.utils.formatEther(tokenBalance));
-  } catch (err) {
-    console.log(err);
-  }
-};
+  useEffect( () => {
+    if (address && stakingContract && tokenContract) {
+      const getReward = async () => {
+        try {
+          const reward = await stakingContract?.calculateReward(address);
+          setRewardBal(ethers.utils.formatUnits(reward, 18));
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      const getBalance = async () => {
+        try {
+          const tokenBalance = await tokenContract?.balanceOf(address);
 
-useEffect(() => {
-  if (address && stakingContract && tokenContract) {
-    const getReward = async () => {
-      try {
-        const reward = await stakingContract?.calculateReward(address);
-        setRewardBal(ethers.utils.formatUnits(reward, 18));
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    const getBalance = async () => {
-      try {
-        const tokenBalance = await tokenContract?.balanceOf(address);
-        setTokenBal(ethers.utils.formatEther(tokenBalance));
-      } catch (err) {
-        console.log(err);
-      }
-      
+          setTokenBal(ethers.utils.formatEther(tokenBalance));
+        } catch (err) {
+          console.log(err);
+        }
+      };
       getReward();
       getBalance();
-    };
-  }
-}, [address, stakingContract, tokenContract]);
-
+    }
+  }, [address, stakingContract, tokenContract]);
 
   return (
     <div className="flex flex-col text-center justify-center ">
